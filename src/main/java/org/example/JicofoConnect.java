@@ -1,20 +1,16 @@
 package org.example;
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
+import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
+import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jxmpp.jid.Jid;
-import org.jxmpp.stringprep.XmppStringprepException;
+import org.jivesoftware.smack.parsing.SmackParsingException;
+import org.jivesoftware.smack.util.PacketParserUtils;
+import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.impl.JidCreate;
 
-import javax.net.ssl.*;
 import java.io.IOException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.logging.Logger;
 
 public class JicofoConnect {
@@ -25,54 +21,74 @@ public class JicofoConnect {
     private final String domain;
     private final String host;
     private final int port;
-    private Jid jid;
-    private XMPPBOSHConnection connection;
+    private static final String focusJID = "focus@auth.vedant-the-intern.pune.cdac.in";
+    private final EntityBareJid roomJID;
+    private XMPPBOSHConnection connectionBOSH;
 
-    public JicofoConnect(String userName, String password, String domain, String host, int port, Jid jid) throws SmackException, IOException, XMPPException, InterruptedException {
+    public JicofoConnect(String userName, String password, String domain, String host, int port, EntityBareJid roomJID) throws SmackException, IOException, XMPPException, InterruptedException {
         this.userName = userName;
         this.password = password;
         this.domain = domain;
         this.host = host;
         this.port = port;
-        this.jid = jid;
-        connect();
+        this.roomJID = roomJID;
     }
 
-    void connect()  {
+    void connectBOSH()  {
         try {
-            LOGGER.info("Reached Here - 0 ");
-//            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-//                    .setUsernameAndPassword(this.userName,this.password)
-//                    .setHost(this.host)
-//                    .setXmppDomain(this.domain)
-//                    .setPort(this.port)
-//                    .build();
             BOSHConfiguration config = BOSHConfiguration.builder()
-//                    .setUsernameAndPassword(this.userName,this.password)
+                    .performSaslAnonymousAuthentication()
                     .setHost(this.host)
                     .setXmppDomain(this.domain)
                     .setPort(this.port)
                     .setFile("/http-bind")
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                    .performSaslAnonymousAuthentication()
                     .build();
-            LOGGER.info("Reached Here - 1 ");
-            this.connection = new XMPPBOSHConnection(config);
-            LOGGER.info("Reached Here - 2 ");
-            this.connection.connect();
-            LOGGER.info("Reached Here - 3 ");
-            this.connection.login();
-            LOGGER.info("Reached Here - 4 ");
+            this.connectionBOSH = new XMPPBOSHConnection(config);
+            this.connectionBOSH.connect().login();
 
-            LOGGER.info("Connection successful");
+            LOGGER.info(String.valueOf(this.connectionBOSH.isAnonymous()));
         } catch (Exception e){
             LOGGER.warning("Connection unsuccessful");
         }
     }
 
-    private void sendConferenceRequest(String roomJid) {
-        IQ response;
+    public static IQ convertXmlToIQ(String xml) throws SmackException, InterruptedException, XmlPullParserException, IOException, SmackParsingException {
+
+        return PacketParserUtils.parseStanza(xml);
     }
+
+    void sendRawConferenceIQ() throws SmackException, InterruptedException, XMPPException.XMPPErrorException, XmlPullParserException, IOException, SmackParsingException {
+        IQ customCinferenceIQ = convertXmlToIQ(
+                "<iq id=\"be1b7e83-d66a-42d7-bd6b-fb4c5e3a5c3c:sendIQ\" to=\"focus.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\"><conference machine-uid=\"9b19307f1fda988b42d51324d963fee6\" room=\"apk@conference.vedant-the-intern.pune.cdac.in\" xmlns=\"http://jitsi.org/protocol/focus\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>"
+        );
+        this.connectionBOSH.sendIqRequestAndWaitForResponse(customCinferenceIQ);
+    }
+
+    void sendConferenceRequest() {
+        try{
+            ConferenceIq iq = new ConferenceIq();
+
+            iq.setTo(JidCreate.entityBareFrom(focusJID));
+            iq.setFrom(JidCreate.entityFullFrom(this.connectionBOSH.getUser().toString()));
+
+            iq.setFocusJid(focusJID);
+
+            iq.setType(IQ.Type.set);
+            iq.setRoom(this.roomJID);
+
+            iq.addProperty("authentication","false");
+
+            LOGGER.info(iq.toXML().toString());
+            IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
+            if(response != null){
+                LOGGER.info(response.toString());
+            }
+        }catch (Exception e){
+            LOGGER.warning(e.toString());
+        }
+    }
+
 
 
 }

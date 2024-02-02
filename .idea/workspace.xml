@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/DummySSLServerSocketFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/DummySSLSocketFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/DummyTrustManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
+    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="Successfully connect to configured Jitsi Meet ecosystem via prosody. Major error was Http -&gt; Https. Solution was to not redirect http traffic on port 80 to https port 443">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/PeriodicMessage.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,14 +47,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "conferenceiq",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/CDAC internship/bin/User2",
+    "last_opened_file_path": "D:/CDAC internship/bin/jitsi-xmpp-extensions",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RunManager">
@@ -87,6 +86,15 @@
       <option name="presentableId" value="Default" />
       <updated>1705563473885</updated>
     </task>
+    <task id="LOCAL-00001" summary="Successfully connect to configured Jitsi Meet ecosystem via prosody. Major error was Http -&gt; Https. Solution was to not redirect http traffic on port 80 to https port 443">
+      <option name="closed" value="true" />
+      <created>1706775083122</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706775083122</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -96,5 +104,9 @@
     <option featureType="dependencySupport" implementationName="executable:kubectl" />
     <option featureType="dependencySupport" implementationName="java:org.apache.spark:spark-core_2.13" />
     <option featureType="dependencySupport" implementationName="java:jakarta.ws.rs:jakarta.ws.rs-api" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Successfully connect to configured Jitsi Meet ecosystem via prosody. Major error was Http -&gt; Https. Solution was to not redirect http traffic on port 80 to https port 443" />
+    <option name="LAST_COMMIT_MESSAGE" value="Successfully connect to configured Jitsi Meet ecosystem via prosody. Major error was Http -&gt; Https. Solution was to not redirect http traffic on port 80 to https port 443" />
   </component>
 </project>
