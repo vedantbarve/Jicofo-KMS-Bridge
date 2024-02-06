@@ -21,7 +21,9 @@ public class Main {
                 JidCreate.entityBareFrom("asdf@conference.vedant-the-intern.pune.cdac.in")
         );
         jicofoConnect.connectBOSH();
-        jicofoConnect.sendRawConferenceIQ();
+        jicofoConnect.sendRawConferenceIQ1(); // Raw string that works
+//        jicofoConnect.sendRawConferenceIQ2(); // Raw string that does not work
+//        jicofoConnect.generateConferenceIQ(); // ConferenceIQ class that does not work
     }
 }
 

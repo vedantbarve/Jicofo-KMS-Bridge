@@ -7,11 +7,20 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.parsing.SmackParsingException;
 import org.jivesoftware.smack.util.PacketParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatException;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
-
+import org.jxmpp.jid.parts.Resourcepart;
+import org.jxmpp.stringprep.XmppStringprepException;
+import java.util.Enumeration;
 import java.io.IOException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.logging.Logger;
+
+import static org.jivesoftware.smack.util.PacketParserUtils.parseStanza;
 
 public class JicofoConnect {
 
@@ -53,41 +62,49 @@ public class JicofoConnect {
         }
     }
 
-    public static IQ convertXmlToIQ(String xml) throws SmackException, InterruptedException, XmlPullParserException, IOException, SmackParsingException {
-
-        return PacketParserUtils.parseStanza(xml);
-    }
-
-    void sendRawConferenceIQ() throws SmackException, InterruptedException, XMPPException.XMPPErrorException, XmlPullParserException, IOException, SmackParsingException {
-        IQ customCinferenceIQ = convertXmlToIQ(
-                "<iq id=\"be1b7e83-d66a-42d7-bd6b-fb4c5e3a5c3c:sendIQ\" to=\"focus.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\"><conference machine-uid=\"9b19307f1fda988b42d51324d963fee6\" room=\"apk@conference.vedant-the-intern.pune.cdac.in\" xmlns=\"http://jitsi.org/protocol/focus\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>"
-        );
-        this.connectionBOSH.sendIqRequestAndWaitForResponse(customCinferenceIQ);
-    }
-
-    void sendConferenceRequest() {
-        try{
-            ConferenceIq iq = new ConferenceIq();
-
-            iq.setTo(JidCreate.entityBareFrom(focusJID));
-            iq.setFrom(JidCreate.entityFullFrom(this.connectionBOSH.getUser().toString()));
-
-            iq.setFocusJid(focusJID);
-
-            iq.setType(IQ.Type.set);
-            iq.setRoom(this.roomJID);
-
-            iq.addProperty("authentication","false");
-
-            LOGGER.info(iq.toXML().toString());
+    void sendRawConferenceIQ1() throws XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, InterruptedException, XmlPullParserException, IOException, SmackParsingException {
+        try {
+            IQ iq = Helper.convertXmlToIQ("<iq id=\"GF5H9-4\" to=\"focus.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\" ><conference machine-uid=\"00:2B:67:45:6B:DC\" xmlns=\"http://jitsi.org/protocol/focus\" room=\"asdf@conference.vedant-the-intern.pune.cdac.in\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>");
             IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
             if(response != null){
-                LOGGER.info(response.toString());
+                LOGGER.info(STR."Response : \{response}");
             }
         }catch (Exception e){
             LOGGER.warning(e.toString());
         }
     }
+
+    void sendRawConferenceIQ2() throws XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, InterruptedException, XmlPullParserException, IOException, SmackParsingException {
+        try {
+            IQ iq = Helper.convertXmlToIQ("<iq id=\"GF5H9-4:sendIQ\" to=\"focus@auth.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\" ><conference machine-uid=\"00:2B:67:45:6B:DC\" xmlns=\"http://jitsi.org/protocol/focus\" room=\"asdf@conference.vedant-the-intern.pune.cdac.in\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>");
+            IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
+            if(response != null){
+                LOGGER.info(STR."Response : \{response}");
+            }
+        }catch (Exception e){
+            LOGGER.warning(e.toString());
+        }
+    }
+
+    void generateConferenceIQ() throws XmppStringprepException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, InterruptedException {
+        try {
+            ConferenceIq iq = new ConferenceIq();
+            iq.setTo(JidCreate.entityBareFrom("focus.vedant-the-intern.pune.cdac.in"));
+            iq.setType(IQ.Type.set);
+
+            iq.setMachineUID(Helper.getMacAddress());
+            iq.setRoom(this.roomJID);
+
+            iq.addProperty("rtcstatsEnabled","false");
+            iq.addProperty("visitors-version","1");
+            LOGGER.info(iq.toXML().toString());
+            IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
+            LOGGER.info(response.toString());
+        }catch (Exception e){
+            LOGGER.warning(e.toString());
+        }
+    }
+
 
 
 
