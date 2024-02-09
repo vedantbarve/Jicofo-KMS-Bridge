@@ -1,29 +1,25 @@
 package org.example;
+
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIqProvider;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.parsing.SmackParsingException;
 import org.jivesoftware.smack.xml.XmlPullParserException;
-import org.jxmpp.jid.impl.JidCreate;
+
 import java.io.IOException;
 
 
 public class Main {
     public static void main(String[] args) throws IOException, SmackException, XMPPException, InterruptedException, XmlPullParserException, SmackParsingException {
-        System.setProperty("smack.debugEnabled","true");
+        System.setProperty("smack.debugEnabled", "true");
         new ConferenceIqProvider();
         JicofoConnect jicofoConnect = new JicofoConnect(
-                "vedant",
-                "asd",
                 "vedant-the-intern.pune.cdac.in",
                 "vedant-the-intern.pune.cdac.in",
                 80,
-                JidCreate.entityBareFrom("asdf@conference.vedant-the-intern.pune.cdac.in")
+                "was@conference.vedant-the-intern.pune.cdac.in"
         );
-        jicofoConnect.connectBOSH();
-        jicofoConnect.sendRawConferenceIQ1(); // Raw string that works
-//        jicofoConnect.sendRawConferenceIQ2(); // Raw string that does not work
-//        jicofoConnect.generateConferenceIQ(); // ConferenceIQ class that does not work
+        jicofoConnect.start();
     }
 }
 
