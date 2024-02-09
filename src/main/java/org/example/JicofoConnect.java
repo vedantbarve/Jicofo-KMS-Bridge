@@ -77,18 +77,6 @@ public class JicofoConnect {
 
     }
 
-    private void sendRawConferenceIQ1() {
-        try {
-            IQ iq = Helper.convertXmlToIQ("<iq id=\"GFH9-4:sendIQ\" to=\"focus.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\" ><conference machine-uid=\"00:2B:67:45:6B:DC\" xmlns=\"http://jitsi.org/protocol/focus\" room=\"was@conference.vedant-the-intern.pune.cdac.in\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>");
-            IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
-            if (response != null) {
-                LOGGER.info(STR."Response : \{response}");
-            }
-        } catch (Exception e) {
-            LOGGER.warning(e.toString());
-        }
-    }
-
     private void initiateServiceDiscovery() {
         ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(this.connectionBOSH);
         String[] featuresList = {
@@ -109,37 +97,4 @@ public class JicofoConnect {
         }
 
     }
-
-//    private void joinMUC() throws XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, MultiUserChatException.MucNotJoinedException, InterruptedException, MultiUserChatException.MucAlreadyJoinedException, MultiUserChatException.NotAMucServiceException {
-//        try {
-//            if (muc != null) {
-//                LOGGER.info("Leaving an MUC we already occupy.");
-//                muc.leave();
-//            }
-//            MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionBOSH).getMultiUserChat(roomJID);
-//            MultiUserChat.MucCreateConfigFormHandle response =  muc.createOrJoin(Resourcepart.from("was@conference.vedant-the-intern.pune.cdac.in"));
-//            if(response == null){
-//                LOGGER.info("Joined MUC");
-//            }else{
-//                LOGGER.info("MUC Created");
-//            }
-//        } catch (Exception e) {
-//            LOGGER.warning(e.toString());
-//        }
-//    }
-
-
-    private void sendRawConferenceIQ2() {
-        try {
-            IQ iq = Helper.convertXmlToIQ("<iq id=\"GF5H9-4:sendIQ\" to=\"focus@auth.vedant-the-intern.pune.cdac.in\" type=\"set\" xmlns=\"jabber:client\" ><conference machine-uid=\"00:2B:67:45:6B:DC\" xmlns=\"http://jitsi.org/protocol/focus\" room=\"asdf@conference.vedant-the-intern.pune.cdac.in\"><property name=\"rtcstatsEnabled\" value=\"false\"/><property name=\"visitors-version\" value=\"1\"/></conference></iq>");
-            IQ response = this.connectionBOSH.sendIqRequestAndWaitForResponse(iq);
-            if (response != null) {
-                LOGGER.info(STR."Response : \{response}");
-            }
-        } catch (Exception e) {
-            LOGGER.warning(e.toString());
-        }
-    }
-
-
 }
