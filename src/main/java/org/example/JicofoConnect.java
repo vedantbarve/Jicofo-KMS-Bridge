@@ -2,6 +2,9 @@ package org.example;
 
 import net.java.sip.communicator.service.protocol.ChatRoom;
 import net.java.sip.communicator.service.protocol.OperationSetMultiUserChat;
+import net.java.sip.communicator.service.protocol.ProtocolProviderService;
+import net.java.sip.communicator.service.protocol.event.LocalUserChatRoomPresenceChangeEvent;
+import net.java.sip.communicator.service.protocol.event.LocalUserChatRoomPresenceListener;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
@@ -9,7 +12,6 @@ import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
@@ -19,13 +21,14 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class JicofoConnect {
+    private ChatRoom mucRoom;
     private static final Logger LOGGER = Logger.getLogger(JicofoConnect.class.getName());
     private final String domain;
     private final String host;
     private final int port;
-    private static final String focusJID = "focus@auth.vedant-the-intern.pune.cdac.in";
     private final EntityBareJid roomJID;
     private XMPPBOSHConnection connectionBOSH;
+    private ProtocolProviderService xmppProvider;
 
 
     public JicofoConnect(String domain, String host, int port, String roomJID) throws IOException {
@@ -35,13 +38,10 @@ public class JicofoConnect {
         this.roomJID = JidCreate.entityBareFrom(roomJID);
     }
 
-    void start() throws MultiUserChatException.MucAlreadyJoinedException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, MultiUserChatException.MucNotJoinedException, InterruptedException, MultiUserChatException.NotAMucServiceException {
+    void start() {
         connectBOSH();
         inviteFocus();
-//        sendRawConferenceIQ1();
-//        sendRawConferenceIQ2();
-//        initiateServiceDiscovery();
-//        joinMUC();
+        joinMUC();
     }
 
     private void connectBOSH() {
@@ -55,7 +55,21 @@ public class JicofoConnect {
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                     .build();
             this.connectionBOSH = new XMPPBOSHConnection(config);
-            this.connectionBOSH.connect().login();
+            this.connectionBOSH.connect();
+
+            ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(this.connectionBOSH);
+            if (discoManager != null) {
+                discoManager.addFeature("http://jabber.org/protocol/disco#info");
+                discoManager.addFeature("urn:xmpp:jingle:apps:rtp:video");
+                discoManager.addFeature("urn:xmpp:jingle:apps:rtp:audio");
+                discoManager.addFeature("urn:xmpp:jingle:transports:ice-udp:1");
+                discoManager.addFeature("urn:xmpp:jingle:transports:dtls-sctp:1");
+                discoManager.addFeature("urn:ietf:rfc:5888");
+                discoManager.addFeature("urn:ietf:rfc:5761");
+                discoManager.addFeature("urn:ietf:rfc:4588");
+                discoManager.addFeature("http://jitsi.org/tcc");
+            }
+            this.connectionBOSH.login();
         } catch (Exception e) {
             LOGGER.warning("Connection unsuccessful");
         }
@@ -73,8 +87,18 @@ public class JicofoConnect {
         }
     }
 
-    void joinConference(){
-
+    private void joinMUC() {
+        try {
+            MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionBOSH).getMultiUserChat(this.roomJID);
+            MultiUserChat.MucCreateConfigFormHandle response = muc.createOrJoin(Resourcepart.fromOrNull("Jicofo-KMS-Bridge"));
+            if (response == null) {
+                LOGGER.info("Joining meet");
+            } else {
+                LOGGER.info("Creating meet");
+            }
+        } catch (Exception e) {
+            LOGGER.warning(e.toString());
+        }
     }
 
     private void initiateServiceDiscovery() {
@@ -95,6 +119,6 @@ public class JicofoConnect {
         for (String s : featuresList) {
             sdm.addFeature(s);
         }
-
     }
 }
+
