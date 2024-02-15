@@ -11,6 +11,7 @@ import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.jingle.JingleManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
@@ -19,6 +20,8 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import static org.jivesoftware.smack.roster.packet.RosterPacket.ItemType.from;
 
 public class JicofoConnect {
     private ChatRoom mucRoom;
@@ -68,6 +71,7 @@ public class JicofoConnect {
                 discoManager.addFeature("urn:ietf:rfc:5761");
                 discoManager.addFeature("urn:ietf:rfc:4588");
                 discoManager.addFeature("http://jitsi.org/tcc");
+
             }
             this.connectionBOSH.login();
         } catch (Exception e) {
@@ -96,29 +100,11 @@ public class JicofoConnect {
             } else {
                 LOGGER.info("Creating meet");
             }
+
         } catch (Exception e) {
             LOGGER.warning(e.toString());
         }
     }
 
-    private void initiateServiceDiscovery() {
-        ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(this.connectionBOSH);
-        String[] featuresList = {
-                "http://jabber.org/protocol/disco#info",
-                "http://jabber.org/protocol/disco#items",
-                "urn:xmpp:jingle:apps:dtls:0",
-                "urn:ietf:rfc:3264",
-                "urn:xmpp:jingle:apps:rtp:audio",
-                "urn:xmpp:jingle:apps:rtp:video",
-                "urn:ietf:rfc:5888",
-                "urn:ietf:rfc:5761",
-                "urn:ietf:rfc:4588",
-                "http://jitsi.org/tcc"
-        };
-
-        for (String s : featuresList) {
-            sdm.addFeature(s);
-        }
-    }
 }
 
