@@ -28,8 +28,8 @@ public class Main {
         JicofoConnect jicofoConnect = new JicofoConnect(
                 "vedant-the-intern.pune.cdac.in",
                 "vedant-the-intern.pune.cdac.in",
-                80,
-                "pop12@conference.vedant-the-intern.pune.cdac.in"
+                5222,
+                "pop13@conference.vedant-the-intern.pune.cdac.in"
         );
         jicofoConnect.start();
     }

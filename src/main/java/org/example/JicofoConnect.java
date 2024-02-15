@@ -10,6 +10,8 @@ import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.jingle.JingleManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -30,7 +32,7 @@ public class JicofoConnect {
     private final String host;
     private final int port;
     private final EntityBareJid roomJID;
-    private XMPPBOSHConnection connectionBOSH;
+    private XMPPTCPConnection connectionTCP;
     private ProtocolProviderService xmppProvider;
 
 
@@ -49,18 +51,18 @@ public class JicofoConnect {
 
     private void connectBOSH() {
         try {
-            BOSHConfiguration config = BOSHConfiguration.builder()
+            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                     .performSaslAnonymousAuthentication()
                     .setHost(this.host)
                     .setXmppDomain(this.domain)
                     .setPort(this.port)
-                    .setFile("/http-bind")
+//
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                     .build();
-            this.connectionBOSH = new XMPPBOSHConnection(config);
-            this.connectionBOSH.connect();
+            this.connectionTCP = new XMPPTCPConnection(config);
+            this.connectionTCP.connect();
 
-            ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(this.connectionBOSH);
+            ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(this.connectionTCP);
             if (discoManager != null) {
                 discoManager.addFeature("http://jabber.org/protocol/disco#info");
                 discoManager.addFeature("urn:xmpp:jingle:apps:rtp:video");
@@ -73,7 +75,7 @@ public class JicofoConnect {
                 discoManager.addFeature("http://jitsi.org/tcc");
 
             }
-            this.connectionBOSH.login();
+            this.connectionTCP.login();
         } catch (Exception e) {
             LOGGER.warning("Connection unsuccessful");
         }
@@ -85,7 +87,7 @@ public class JicofoConnect {
             focusInviteIQ.setType(IQ.Type.set);
             focusInviteIQ.setTo(JidCreate.domainBareFrom("focus.vedant-the-intern.pune.cdac.in"));
             focusInviteIQ.setRoom(this.roomJID);
-            this.connectionBOSH.createStanzaCollectorAndSend(focusInviteIQ);
+            this.connectionTCP.createStanzaCollectorAndSend(focusInviteIQ);
         } catch (Exception e) {
             LOGGER.warning(e.toString());
         }
@@ -93,7 +95,7 @@ public class JicofoConnect {
 
     private void joinMUC() {
         try {
-            MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionBOSH).getMultiUserChat(this.roomJID);
+            MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionTCP).getMultiUserChat(this.roomJID);
             MultiUserChat.MucCreateConfigFormHandle response = muc.createOrJoin(Resourcepart.fromOrNull("Jicofo-KMS-Bridge"));
             if (response == null) {
                 LOGGER.info("Joining meet");
