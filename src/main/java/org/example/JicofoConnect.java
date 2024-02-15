@@ -1,19 +1,11 @@
 package org.example;
 
-import net.java.sip.communicator.service.protocol.ChatRoom;
-import net.java.sip.communicator.service.protocol.OperationSetMultiUserChat;
-import net.java.sip.communicator.service.protocol.ProtocolProviderService;
-import net.java.sip.communicator.service.protocol.event.LocalUserChatRoomPresenceChangeEvent;
-import net.java.sip.communicator.service.protocol.event.LocalUserChatRoomPresenceListener;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
 import org.jivesoftware.smack.*;
-import org.jivesoftware.smack.bosh.BOSHConfiguration;
-import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.jingle.JingleManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
@@ -23,18 +15,13 @@ import org.jxmpp.jid.parts.Resourcepart;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import static org.jivesoftware.smack.roster.packet.RosterPacket.ItemType.from;
-
 public class JicofoConnect {
-    private ChatRoom mucRoom;
     private static final Logger LOGGER = Logger.getLogger(JicofoConnect.class.getName());
     private final String domain;
     private final String host;
     private final int port;
     private final EntityBareJid roomJID;
     private XMPPTCPConnection connectionTCP;
-    private ProtocolProviderService xmppProvider;
-
 
     public JicofoConnect(String domain, String host, int port, String roomJID) throws IOException {
         this.domain = domain;

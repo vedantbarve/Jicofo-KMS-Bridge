@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="send conferenceIQ using class in jitsi-xmpp-extensions">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="establish jingle session.&#10;Changing connection type from BOSH to TCP">
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,12 +22,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "vedantbarve"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;vedantbarve&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -154,7 +152,23 @@
       <option name="project" value="LOCAL" />
       <updated>1707462339083</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="join muc without establishing jingle session">
+      <option name="closed" value="true" />
+      <created>1707983216260</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1707983216260</updated>
+    </task>
+    <task id="LOCAL-00008" summary="establish jingle session.&#10;Changing connection type from BOSH to TCP">
+      <option name="closed" value="true" />
+      <created>1707983690550</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1707983690550</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -170,6 +184,8 @@
     <MESSAGE value="send raw conference IQ" />
     <MESSAGE value="send raw conference IQ successfully with the 3 situations" />
     <MESSAGE value="send conferenceIQ using class in jitsi-xmpp-extensions" />
-    <option name="LAST_COMMIT_MESSAGE" value="send conferenceIQ using class in jitsi-xmpp-extensions" />
+    <MESSAGE value="join muc without establishing jingle session" />
+    <MESSAGE value="establish jingle session.&#10;Changing connection type from BOSH to TCP" />
+    <option name="LAST_COMMIT_MESSAGE" value="establish jingle session.&#10;Changing connection type from BOSH to TCP" />
   </component>
 </project>
