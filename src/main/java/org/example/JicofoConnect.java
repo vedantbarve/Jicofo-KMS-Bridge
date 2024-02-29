@@ -1,6 +1,8 @@
 package org.example;
 
+import org.jitsi.xmpp.extensions.jingle.JingleAction;
 import org.jitsi.xmpp.extensions.jingle.JingleIQ;
+import org.jitsi.xmpp.extensions.jingle.JinglePacketFactory;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.filter.*;
@@ -22,6 +24,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 import java.util.Random;
@@ -74,19 +77,22 @@ public class JicofoConnect {
                 discoManager.addFeature("http://jitsi.org/tcc");
             }
             this.connectionTCP.login();
-            this.connectionTCP.addStanzaListener(
-                    stanza -> {
-                        LOGGER.info(stanza.toXML().toString());
-                    },
-                    stanza -> stanza instanceof JingleIQ
-            );
-
             this.connectionTCP.registerIQRequestHandler(
-                    new AbstractIqRequestHandler(JingleIQ.ELEMENT,JingleIQ.NAMESPACE, IQ.Type.set, IQRequestHandler.Mode.sync) {
+                    new AbstractIqRequestHandler(
+                            JingleIQ.ELEMENT,
+                            JingleIQ.NAMESPACE,
+                            IQ.Type.set,
+                            IQRequestHandler.Mode.sync
+                    ) {
                         @Override
                         public IQ handleIQRequest(IQ iqRequest) {
-                            LOGGER.info("In registerIQRequestHandler :");
-                            LOGGER.info(iqRequest.toXML().toString());
+                            JingleIQ jingleIQ = (JingleIQ) iqRequest;
+                            if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
+                                LOGGER.info("SESSION INITIATE");
+                                sendSessionAccept(jingleIQ);
+                            } else if (jingleIQ.getAction() == JingleAction.SESSION_TERMINATE) {
+                                LOGGER.info("SESSION TERMINATE");
+                            }
                             return null;
                         }
                     }
@@ -94,8 +100,6 @@ public class JicofoConnect {
         } catch (Exception e) {
             LOGGER.warning("Connection unsuccessful");
         }
-
-
     }
 
     private void inviteFocus() {
@@ -104,7 +108,7 @@ public class JicofoConnect {
             focusInviteIQ.setType(IQ.Type.set);
             focusInviteIQ.setTo(JidCreate.domainBareFrom("focus.vedant-the-intern.pune.cdac.in"));
             focusInviteIQ.setRoom(this.roomJID);
-            this.connectionTCP.createStanzaCollectorAndSend(focusInviteIQ);
+            this.connectionTCP.sendStanza(focusInviteIQ);
 
         } catch (Exception e) {
             LOGGER.warning(e.toString());
@@ -116,6 +120,23 @@ public class JicofoConnect {
             MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionTCP).getMultiUserChat(this.roomJID);
             muc.createOrJoin(Resourcepart.fromOrNull(RandomStringGenerator.generateRandomString()));
         } catch (Exception e) {
+            LOGGER.warning(e.toString());
+        }
+    }
+
+    private void sendSessionAccept(JingleIQ jingleIQ) {
+        try{
+            this.connectionTCP.sendStanza(IQ.createResultIQ(jingleIQ));
+            IQ response = this.connectionTCP.sendIqRequestAndWaitForResponse(
+                    JinglePacketFactory.createSessionAccept(
+                            jingleIQ.getTo(),
+                            jingleIQ.getFrom(),
+                            jingleIQ.getSID(),
+                            jingleIQ.getContentList()
+                    )
+            );
+            LOGGER.info(response.toString());
+        }catch (Exception e){
             LOGGER.warning(e.toString());
         }
     }
