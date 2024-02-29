@@ -36,7 +36,6 @@ public class Main {
     private static ParsingExceptionCallback ExceptionLoggingCallback() {
         return null;
     }
-
 }
 
 
