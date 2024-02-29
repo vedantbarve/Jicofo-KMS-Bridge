@@ -1,9 +1,7 @@
 package org.example;
 
-
-import org.jitsi.xmpp.extensions.colibri2.IqProviderUtils;
 import org.jitsi.xmpp.extensions.jingle.JingleIQ;
-import org.example.JingleIQProvider;
+import org.jitsi.xmpp.extensions.jingle.JingleIQProvider;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIqProvider;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.parsing.ParsingExceptionCallback;
@@ -13,10 +11,8 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        System.setProperty("smack.debugEnabled", "true");
-        IqProviderUtils.registerProviders();
-        SmackConfiguration.setStanzaCollectorSize(2500000);
-//        SmackConfiguration.setDefaultParsingExceptionCallback(ExceptionLoggingCallback());
+        System.setProperty("smack.debugEnabled", "true");
+        SmackConfiguration.setDefaultParsingExceptionCallback(ExceptionLoggingCallback());
         new ConferenceIqProvider();
         ProviderManager.addIQProvider(
                 JingleIQ.ELEMENT,

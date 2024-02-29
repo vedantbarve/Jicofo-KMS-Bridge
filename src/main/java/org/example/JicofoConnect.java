@@ -4,11 +4,19 @@ import org.jitsi.xmpp.extensions.jingle.JingleIQ;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.filter.*;
+import org.jivesoftware.smack.iqrequest.AbstractIqRequestHandler;
+import org.jivesoftware.smack.iqrequest.IQRequestHandler;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.jingle.JingleManager;
+import org.jivesoftware.smackx.jingle.JingleSession;
+import org.jivesoftware.smackx.jingle.JingleSessionHandler;
+import org.jivesoftware.smackx.jingle.element.Jingle;
+import org.jivesoftware.smackx.jingle.element.JingleContentTransport;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
@@ -26,11 +34,7 @@ public class JicofoConnect {
     private final int port;
     private final EntityBareJid roomJID;
     private XMPPTCPConnection connectionTCP;
-    private JingleManager jingleManager;
-    private final JingleIQListenerImpl jingleIQHandler = new JingleIQListenerImpl();
-    private static final AndFilter jingleFilter = new AndFilter(
-            new StanzaTypeFilter(IQ.class)
-    );
+    private static String sid;
 
     public JicofoConnect(String domain, String host, int port, String roomJID) throws IOException {
         this.domain = domain;
@@ -63,13 +67,30 @@ public class JicofoConnect {
                 discoManager.addFeature("urn:xmpp:jingle:apps:rtp:audio");
                 discoManager.addFeature("urn:xmpp:jingle:transports:ice-udp:1");
                 discoManager.addFeature("urn:xmpp:jingle:transports:dtls-sctp:1");
+                discoManager.addFeature("urn:ietf:params:xml:ns:xmpp-stanzas");
                 discoManager.addFeature("urn:ietf:rfc:5888");
                 discoManager.addFeature("urn:ietf:rfc:5761");
                 discoManager.addFeature("urn:ietf:rfc:4588");
                 discoManager.addFeature("http://jitsi.org/tcc");
             }
             this.connectionTCP.login();
-            this.connectionTCP.addAsyncStanzaListener(jingleIQHandler, jingleFilter);
+            this.connectionTCP.addStanzaListener(
+                    stanza -> {
+                        LOGGER.info(stanza.toXML().toString());
+                    },
+                    stanza -> stanza instanceof JingleIQ
+            );
+
+            this.connectionTCP.registerIQRequestHandler(
+                    new AbstractIqRequestHandler(JingleIQ.ELEMENT,JingleIQ.NAMESPACE, IQ.Type.set, IQRequestHandler.Mode.sync) {
+                        @Override
+                        public IQ handleIQRequest(IQ iqRequest) {
+                            LOGGER.info("In registerIQRequestHandler :");
+                            LOGGER.info(iqRequest.toXML().toString());
+                            return null;
+                        }
+                    }
+            );
         } catch (Exception e) {
             LOGGER.warning("Connection unsuccessful");
         }
@@ -99,29 +120,30 @@ public class JicofoConnect {
         }
     }
 }
- class RandomStringGenerator {
 
-     public static String generateRandomString() {
-         // Define the characters that can be used in the random string
-         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+class RandomStringGenerator {
 
-         // Create a Random object
-         Random random = new Random();
+    public static String generateRandomString() {
+        // Define the characters that can be used in the random string
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-         // Create a StringBuilder to build the random string
-         StringBuilder randomString = new StringBuilder();
+        // Create a Random object
+        Random random = new Random();
 
-         // Generate 10 random characters and append to the StringBuilder
-         for (int i = 0; i < 10; i++) {
-             int randomIndex = random.nextInt(characters.length());
-             char randomChar = characters.charAt(randomIndex);
-             randomString.append(randomChar);
-         }
+        // Create a StringBuilder to build the random string
+        StringBuilder randomString = new StringBuilder();
 
-         // Convert StringBuilder to String and return
-         return randomString.toString();
-     }
- }
+        // Generate 10 random characters and append to the StringBuilder
+        for (int i = 0; i < 10; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            randomString.append(randomChar);
+        }
+
+        // Convert StringBuilder to String and return
+        return randomString.toString();
+    }
+}
 
 
 
