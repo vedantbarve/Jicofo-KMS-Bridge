@@ -90,7 +90,11 @@ public class JicofoConnect {
                             if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
                                 LOGGER.info("SESSION INITIATE");
                                 sendSessionAccept(jingleIQ);
-                            } else if (jingleIQ.getAction() == JingleAction.SESSION_TERMINATE) {
+                            }
+                            else if(jingleIQ.getAction() == JingleAction.SOURCEADD){
+                                LOGGER.info(STR."SOURCE ADD : \n\{jingleIQ.toXML()}");
+                            }
+                            else if (jingleIQ.getAction() == JingleAction.SESSION_TERMINATE) {
                                 LOGGER.info("SESSION TERMINATE");
                             }
                             return null;
