@@ -78,14 +78,10 @@ public class JicofoConnect {
                         public IQ handleIQRequest(IQ iqRequest) {
                             JingleIQ jingleIQ = (JingleIQ) iqRequest;
                             if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
-                                LOGGER.info("SESSION INITIATE");
+                                LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
                                 sendSessionAccept(jingleIQ);
-                            }
-                            else if(jingleIQ.getAction() == JingleAction.SOURCEADD){
-                                LOGGER.info(STR."SOURCE ADD : \n\{jingleIQ.toXML()}");
-                            }
-                            else if (jingleIQ.getAction() == JingleAction.SESSION_TERMINATE) {
-                                LOGGER.info("SESSION TERMINATE");
+                            }else{
+                                LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
                             }
                             return null;
                         }
@@ -103,7 +99,6 @@ public class JicofoConnect {
             focusInviteIQ.setTo(JidCreate.domainBareFrom("focus.vedant-the-intern.pune.cdac.in"));
             focusInviteIQ.setRoom(this.roomJID);
             this.connectionTCP.sendStanza(focusInviteIQ);
-
         } catch (Exception e) {
             LOGGER.warning(e.toString());
         }
@@ -111,7 +106,9 @@ public class JicofoConnect {
 
     private void joinMUC() {
         try {
-            MultiUserChat muc = MultiUserChatManager.getInstanceFor(this.connectionTCP).getMultiUserChat(this.roomJID);
+            MultiUserChat muc = MultiUserChatManager
+                    .getInstanceFor(this.connectionTCP)
+                    .getMultiUserChat(this.roomJID);
             muc.createOrJoin(Resourcepart.fromOrNull(RandomStringGenerator.generateRandomString()));
         } catch (Exception e) {
             LOGGER.warning(e.toString());
@@ -121,7 +118,7 @@ public class JicofoConnect {
     private void sendSessionAccept(JingleIQ jingleIQ) {
         try{
             this.connectionTCP.sendStanza(IQ.createResultIQ(jingleIQ));
-            IQ response = this.connectionTCP.sendIqRequestAndWaitForResponse(
+            this.connectionTCP.sendStanza(
                     JinglePacketFactory.createSessionAccept(
                             jingleIQ.getTo(),
                             jingleIQ.getFrom(),
@@ -129,7 +126,6 @@ public class JicofoConnect {
                             jingleIQ.getContentList()
                     )
             );
-            LOGGER.info(response.toString());
         }catch (Exception e){
             LOGGER.warning(e.toString());
         }
@@ -137,7 +133,6 @@ public class JicofoConnect {
 }
 
 class RandomStringGenerator {
-
     public static String generateRandomString() {
         // Define the characters that can be used in the random string
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
