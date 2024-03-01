@@ -5,26 +5,17 @@ import org.jitsi.xmpp.extensions.jingle.JingleIQ;
 import org.jitsi.xmpp.extensions.jingle.JinglePacketFactory;
 import org.jitsi.xmpp.extensions.jitsimeet.ConferenceIq;
 import org.jivesoftware.smack.*;
-import org.jivesoftware.smack.filter.*;
 import org.jivesoftware.smack.iqrequest.AbstractIqRequestHandler;
 import org.jivesoftware.smack.iqrequest.IQRequestHandler;
 import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.Stanza;
-import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.jingle.JingleManager;
-import org.jivesoftware.smackx.jingle.JingleSession;
-import org.jivesoftware.smackx.jingle.JingleSessionHandler;
-import org.jivesoftware.smackx.jingle.element.Jingle;
-import org.jivesoftware.smackx.jingle.element.JingleContentTransport;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
-import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 import java.util.Random;
@@ -37,7 +28,6 @@ public class JicofoConnect {
     private final int port;
     private final EntityBareJid roomJID;
     private XMPPTCPConnection connectionTCP;
-    private static String sid;
 
     public JicofoConnect(String domain, String host, int port, String roomJID) throws IOException {
         this.domain = domain;
