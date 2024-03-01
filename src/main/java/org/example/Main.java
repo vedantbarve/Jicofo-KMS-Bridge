@@ -24,7 +24,7 @@ public class Main {
                 "vedant-the-intern.pune.cdac.in",
                 "vedant-the-intern.pune.cdac.in",
                 5222,
-                "pop1@conference.vedant-the-intern.pune.cdac.in"
+                "pop2@conference.vedant-the-intern.pune.cdac.in"
         );
         jicofoConnect.start();
 
