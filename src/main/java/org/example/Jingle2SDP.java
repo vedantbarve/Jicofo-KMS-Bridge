@@ -82,7 +82,7 @@ public class Jingle2SDP {
                 }
 
                 for (Element data : transportChildren) {
-                    if (data.getName().equals("fingerprint") && data.getNamespace().toString().equals("urn:xmpp:jingle:apps:dtls:0")) {
+                    if (data.getName().equals("fingerprint")) {
                         fingerprint = data;
                     }
                     if (data.getName().equals("sctp") && data.getNamespace().toString().equals("urn:xmpp:jingle:transports:dtls-sctp:1")) {
@@ -128,8 +128,7 @@ public class Jingle2SDP {
                 }
 
                 for (Element transportChild : transport.getChildren()) {
-                    String xmlns = "urn:xmpp:jingle:apps:dtls:0";
-                    if (Objects.equals(transportChild.getAttributeValue("xmlns"), xmlns)) {
+                    if (Objects.equals(transportChild.getName(), "fingerprint")) {
                         String hash = transportChild.getAttributeValue("hash");
                         String fingerprintValue = transportChild.getValue();
                         sdpBuilder.append(STR."a=fingerprint:\{hash} \{fingerprintValue}\n");

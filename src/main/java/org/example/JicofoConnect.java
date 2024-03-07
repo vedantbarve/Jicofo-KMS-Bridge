@@ -129,6 +129,12 @@ public class JicofoConnect {
 
     private void sendSessionAccept(JingleIQ jingleIQ) {
         try{
+            LOGGER.info(STR."=====session-accept======\n\{JinglePacketFactory.createSessionAccept(
+                    jingleIQ.getTo(),
+                    jingleIQ.getFrom(),
+                    jingleIQ.getSID(),
+                    jingleIQ.getContentList()
+            ).toXML()}\n=====session-accept======");
             this.connectionTCP.sendStanza(IQ.createResultIQ(jingleIQ));
             this.connectionTCP.sendStanza(
                     JinglePacketFactory.createSessionAccept(

@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="handle different cases for jingleActions">
+    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="jingle2sdp conversion done">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -244,7 +244,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709279490346</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="jingle2sdp conversion done">
+      <option name="closed" value="true" />
+      <created>1709794591271</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1709794591271</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -266,6 +274,7 @@
     <MESSAGE value="able to extract and parse jingle session successfully" />
     <MESSAGE value="establish jingle session with jicofo" />
     <MESSAGE value="handle different cases for jingleActions" />
-    <option name="LAST_COMMIT_MESSAGE" value="handle different cases for jingleActions" />
+    <MESSAGE value="jingle2sdp conversion done" />
+    <option name="LAST_COMMIT_MESSAGE" value="jingle2sdp conversion done" />
   </component>
 </project>
