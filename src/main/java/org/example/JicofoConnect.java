@@ -1,5 +1,6 @@
 package org.example;
 
+import org.jdom2.JDOMException;
 import org.jitsi.xmpp.extensions.jingle.JingleAction;
 import org.jitsi.xmpp.extensions.jingle.JingleIQ;
 import org.jitsi.xmpp.extensions.jingle.JinglePacketFactory;
@@ -79,6 +80,17 @@ public class JicofoConnect {
                             JingleIQ jingleIQ = (JingleIQ) iqRequest;
                             if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
+                                Jingle2SDP jingle2SDP = new Jingle2SDP(
+                                        jingleIQ.toXML().toString(),
+                                        jingleIQ.getSID(),
+                                        false,
+                                        false
+                                );
+                                try {
+                                    LOGGER.info(STR."===== SDP =====\n\{jingle2SDP.jingle2SDP()}\n");
+                                } catch (IOException | JDOMException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 sendSessionAccept(jingleIQ);
                             }else{
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
