@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="jingle2sdp conversion done">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="fix fingerprint attribute issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Jingle2SDP.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709794591271</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="fix fingerprint attribute issue">
+      <option name="closed" value="true" />
+      <created>1709811422514</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1709811422514</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -275,6 +284,7 @@
     <MESSAGE value="establish jingle session with jicofo" />
     <MESSAGE value="handle different cases for jingleActions" />
     <MESSAGE value="jingle2sdp conversion done" />
-    <option name="LAST_COMMIT_MESSAGE" value="jingle2sdp conversion done" />
+    <MESSAGE value="fix fingerprint attribute issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix fingerprint attribute issue" />
   </component>
 </project>

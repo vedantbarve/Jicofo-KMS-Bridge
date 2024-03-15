@@ -80,14 +80,9 @@ public class JicofoConnect {
                             JingleIQ jingleIQ = (JingleIQ) iqRequest;
                             if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
-                                Jingle2SDP jingle2SDP = new Jingle2SDP(
-                                        jingleIQ.toXML().toString(),
-                                        jingleIQ.getSID(),
-                                        false,
-                                        false
-                                );
+                                Convert convert = new Convert();
                                 try {
-                                    LOGGER.info(STR."===== SDP =====\n\{jingle2SDP.jingle2SDP()}\n");
+                                    convert.Jingle2SDP(jingleIQ,false,false);
                                 } catch (IOException | JDOMException e) {
                                     throw new RuntimeException(e);
                                 }
