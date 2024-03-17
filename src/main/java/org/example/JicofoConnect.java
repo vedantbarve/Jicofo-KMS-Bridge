@@ -73,21 +73,18 @@ public class JicofoConnect {
                             JingleIQ.ELEMENT,
                             JingleIQ.NAMESPACE,
                             IQ.Type.set,
-                            IQRequestHandler.Mode.sync
+                            IQRequestHandler.Mode.async
                     ) {
                         @Override
                         public IQ handleIQRequest(IQ iqRequest) {
+
                             JingleIQ jingleIQ = (JingleIQ) iqRequest;
+
                             if (jingleIQ.getAction() == JingleAction.SESSION_INITIATE) {
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
-                                Convert convert = new Convert();
-                                try {
-                                    convert.Jingle2SDP(jingleIQ,false,false);
-                                } catch (IOException | JDOMException e) {
-                                    throw new RuntimeException(e);
-                                }
                                 sendSessionAccept(jingleIQ);
-                            }else{
+                            }
+                            else{
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
                             }
                             return null;

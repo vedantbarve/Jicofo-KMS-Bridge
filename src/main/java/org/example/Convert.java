@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Convert {
-    public void Jingle2SDP(JingleIQ jingleIQ, boolean removeTcpCandidates, boolean failICE) throws IOException, JDOMException {
+    public String Jingle2SDP(JingleIQ jingleIQ, boolean removeTcpCandidates, boolean failICE) throws IOException, JDOMException {
 
         //xml parse
         SAXBuilder saxBuilder = new SAXBuilder();
@@ -38,7 +38,7 @@ public class Convert {
 
         // Add a=group:bundle
         StringBuilder bundle = new StringBuilder();
-        bundle.append("a=group:BUNDLE ");
+        bundle.append("a=group:BUNDLE");
 
 
         var groups = jingleChildren.stream().filter(element -> element.getName().equals("group"));
@@ -46,7 +46,7 @@ public class Convert {
                 group->{
                     for(var child : group.getChildren()){
                         if(!child.getAttributeValue("name").equals("data")){
-                            bundle.append(STR."\{child.getAttributeValue("name")} ");
+                            bundle.append(STR." \{child.getAttributeValue("name")}");
                         }
                     }
                 }
@@ -94,9 +94,9 @@ public class Convert {
 
                 StringBuilder proto = new StringBuilder();
                 if (fingerprint != null) {
-                    proto.append((sctp == null) ? "UDP/DTLS/SCTP" : "UDP/TLS/RTP/SAVPF");
+                    proto.append((sctp != null) ? " UDP/DTLS/SCTP" : " UDP/TLS/RTP/SAVPF");
                 } else {
-                    proto.append("UDP/TLS/RTP/SAVPF");
+                    proto.append(" UDP/TLS/RTP/SAVPF");
                 }
 
                 if (sctp != null) {
@@ -108,11 +108,11 @@ public class Convert {
                     StringBuilder fmt = new StringBuilder();
                     if (descChildren != null) {
                         var data = descChildren.stream().filter(element -> element.getName().equals("payload-type"));
-                        data.forEach(value->fmt.append(STR."\{value.getAttributeValue("id")} "));
+                        data.forEach(value->fmt.append(STR." \{value.getAttributeValue("id")}"));
                     }
                     if (desc != null) {
                         String media = desc.getAttributeValue("media");
-                        sdpBuilder.append(STR."m=\{media} \{mediaPort} \{proto} \{fmt}\n");
+                        sdpBuilder.append(STR."m=\{media} \{mediaPort}\{proto}\{fmt}\n");
                     }
 
                 }
@@ -169,25 +169,25 @@ public class Convert {
                                     String relAddr = data.getAttributeValue("rel-addr");
                                     String relPort = data.getAttributeValue("rel-port");
 
-                                    sdpBuilder.append(STR."a=candidate:\{foundation} \{component} \{protocol} \{priority} \{ip} \{port} typ ");
+                                    sdpBuilder.append(STR."a=candidate:\{foundation} \{component} \{protocol} \{priority} \{ip} \{port} typ \{type}");
                                     switch (type) {
                                         case "srflx":
                                         case "prflx":
                                         case "relay":
                                             if (relAddr != null && relPort != null) {
-                                                sdpBuilder.append(STR."raddr \{relAddr} rport \{relPort} ");
+                                                sdpBuilder.append(STR." raddr \{relAddr} rport \{relPort}");
                                             }
                                     }
 
                                     if (protocol.equals("tcp")) {
                                         String tcpType = data.getAttributeValue("rel-port");
-                                        sdpBuilder.append(STR."tcptype \{tcpType} ");
+                                        sdpBuilder.append(STR." tcptype \{tcpType}");
                                     }
                                     String generation = data.getAttributeValue("generation");
                                     if (generation != null) {
-                                        sdpBuilder.append(STR."generation \{generation}\n");
+                                        sdpBuilder.append(STR." generation \{generation}\n");
                                     } else {
-                                        sdpBuilder.append("generation 0\n");
+                                        sdpBuilder.append(" generation 0\n");
                                     }
                                 }
                         );
@@ -214,9 +214,10 @@ public class Convert {
                 sdpBuilder.append(STR."a=mid:\{name}\n");
 
                 if(desc != null && descChildren != null && !descChildren.isEmpty()){
+
                     var rtcpmuxTag = descChildren.stream().filter(element -> element.getName().equals("rtcp-mux"));
                     if(!rtcpmuxTag.toList().isEmpty()){
-                        sdpBuilder.append("rtcp-mux\n");
+                        sdpBuilder.append("a=rtcp-mux\n");
                     }
 
                     var payloadTypeTag = descChildren.stream().filter(element -> element.getName().equals("payload-type"));
@@ -225,29 +226,32 @@ public class Convert {
                                 String payloadID = data.getAttributeValue("id");
                                 String payloadName = data.getAttributeValue("name");
                                 String clockrate = data.getAttributeValue("clockrate");
-                                sdpBuilder.append(STR."a=rtpmap:\{payloadID} \{payloadName}/\{clockrate}");
-                                String channels = data.getAttributeValue("channels");
-                                if (channels != null && !channels.equals("1")) {
-                                    sdpBuilder.append(STR."/\{channels}\n");
-                                } else {
-                                    sdpBuilder.append("\n");
-                                }
-                                sdpBuilder.append(STR."a=fmtp:\{payloadID} ");
 
-                                var parameterTag = data.getChildren().stream().filter(element -> data.getName().equals("parameter"));
-                                parameterTag.forEach(
-                                        parameter -> {
+                                String channels = data.getAttributeValue("channels");
+                                if(channels == null){
+                                    channels = "";
+                                }else {
+                                    channels = STR."/\{channels}";
+                                }
+
+                                sdpBuilder.append(STR."a=rtpmap:\{payloadID} \{payloadName}/\{clockrate}\{channels}\n");
+
+                                var parameterTag = data.getChildren().stream().filter(element -> element.getName().equals("parameter"));
+                                var parameters = parameterTag.toList();
+                                if(!parameters.isEmpty()){
+                                    sdpBuilder.append(STR."a=fmtp:\{payloadID} ");
+                                    for(var parameter : parameters){
+                                        {
                                             String parameterName = parameter.getAttributeValue("name");
                                             String parameterValue = parameter.getAttributeValue("value");
-                                            if (parameterName != null && !parameterName.isEmpty()) {
-                                                sdpBuilder.append(STR."\{parameterName}=\{parameterValue}");
-                                                if (parameter != parameter.getChildren().getLast()) {
-                                                    sdpBuilder.append(";");
-                                                }
-                                            }
+                                            if (parameterName != null && !parameterName.isEmpty()) sdpBuilder.append(STR."\{parameterName}=");
+                                            if (parameterValue != null && !parameterValue.isEmpty()) sdpBuilder.append(STR."\{parameterValue};");
                                         }
-                                );
-                                sdpBuilder.append("\n");
+                                    }
+                                    sdpBuilder.deleteCharAt(sdpBuilder.length()-1);
+                                    sdpBuilder.append("\n");
+                                }
+
 
                                 var rtcpfbtrrintTag = data.getChildren().stream().filter(element -> element.getName().equals("rtcp-fb-trr-int"));
                                 rtcpfbtrrintTag.forEach(
@@ -269,7 +273,7 @@ public class Convert {
                                             String fbtype = rtcpfb.getAttributeValue("type");
                                             sdpBuilder.append(STR."a=rtcp-fb:\{payloadID} \{fbtype}");
                                             if (rtcpfb.getAttributeValue("subtype") != null) {
-                                                sdpBuilder.append(rtcpfb.getAttributeValue("subtype"));
+                                                sdpBuilder.append(STR." \{rtcpfb.getAttributeValue("subtype")}");
                                             }
                                             sdpBuilder.append("\n");
                                         }
@@ -375,6 +379,7 @@ public class Convert {
         }
         // Print sdp
         System.out.println(sdpBuilder);
+        return sdpBuilder.toString();
     }
 
     public void SDP2Jingle(JingleIQ jingleIQ, boolean removeTcpCandidates, boolean failICE){

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // System.setProperty("smack.debugEnabled", "true");
+//        System.setProperty("smack.debugEnabled", "true");
         SmackConfiguration.setDefaultParsingExceptionCallback(ExceptionLoggingCallback());
         new ConferenceIqProvider();
         ProviderManager.addIQProvider(
@@ -24,7 +24,7 @@ public class Main {
                 "vedant-the-intern.pune.cdac.in",
                 "vedant-the-intern.pune.cdac.in",
                 5222,
-                "pop4@conference.vedant-the-intern.pune.cdac.in"
+                "pop7@conference.vedant-the-intern.pune.cdac.in"
         );
         jicofoConnect.start();
 
