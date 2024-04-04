@@ -84,9 +84,9 @@ public class JicofoConnect {
                                 LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
                                 sendSessionAccept(jingleIQ);
                             }
-                            else{
-                                LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
-                            }
+//                            else{
+//                                LOGGER.info(STR."\{jingleIQ.getAction()} : \n\{jingleIQ.toXML()}");
+//                            }
                             return null;
                         }
                     }
