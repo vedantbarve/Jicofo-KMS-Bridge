@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="update jingle2sdp">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dataclasses/ParameterDataClass.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dataclasses/RTCPFBDataClass.kt" afterDir="false" />
+    <list default="true" id="7d239dae-abd9-4232-9b79-03ff30870b3f" name="Changes" comment="resolve sdp2jingle">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Convert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Convert.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/JicofoConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +34,7 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="a4bdfd6f-10c7-4dfa-9933-5bde13361199" />
+        <option name="accountId" value="cf13f70a-417a-4246-bea1-ad5dca59f727" />
         <option name="url" value="https://github.com/vedantbarve/Jicofo-KMS-Bridge.git" />
       </UrlAndAccount>
     </option>
@@ -56,6 +55,9 @@
     <setting file="jar://$MAVEN_REPOSITORY$/org/jitsi/jitsi-xmpp-extensions/1.0-78-g62d03d4/jitsi-xmpp-extensions-1.0-78-g62d03d4-sources.jar!/org/jitsi/xmpp/extensions/jitsimeet/ConferenceIq.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="jar://$MAVEN_REPOSITORY$/org/jitsi/jitsi-xmpp-extensions/1.0-78-g62d03d4/jitsi-xmpp-extensions-1.0-78-g62d03d4-sources.jar!/org/jitsi/xmpp/extensions/jitsimeet/TranslationLanguageExtension.java" root0="SKIP_INSPECTION" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -64,35 +66,38 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2b7Q7IugucKRN4S6nq8ziamPgGQ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "Application.Test.executor": "Run",
-    "Attach to process.pid 23396.executor": "ProcessAttachDebug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "convert",
-    "ignore.preview.features.used": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Vedant/CDAC internship/bin/Jicofo-KMS-Bridge/src/main/java/org/example",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
+    &quot;Attach to process.pid 23396.executor&quot;: &quot;ProcessAttachDebug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;final&quot;,
+    &quot;ignore.preview.features.used&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Vedant/CDAC internship/bin/Jicofo-KMS-Bridge/src/main/java/org/example/dataclasses&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Vedant\CDAC internship\bin\Jicofo-KMS-Bridge\src\main\java\org\example\dataclasses" />
       <recent name="D:\Vedant\CDAC internship\bin\Jicofo-KMS-Bridge\src\main\java\org\example" />
       <recent name="D:\CDAC internship\bin\Jicofo-KMS-Bridge\src\main\java\org\example" />
       <recent name="D:\CDAC internship\bin\Jicofo-KMS-Bridge\src\main\java\org\example\xmpp" />
@@ -294,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710680100388</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="resolve sdp2jingle">
+      <option name="closed" value="true" />
+      <created>1712200895687</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1712200895687</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -320,6 +333,7 @@
     <MESSAGE value="fix fingerprint attribute issue" />
     <MESSAGE value="Jingle2SDP done. SDP2Jingle in progress" />
     <MESSAGE value="update jingle2sdp" />
-    <option name="LAST_COMMIT_MESSAGE" value="update jingle2sdp" />
+    <MESSAGE value="resolve sdp2jingle" />
+    <option name="LAST_COMMIT_MESSAGE" value="resolve sdp2jingle" />
   </component>
 </project>

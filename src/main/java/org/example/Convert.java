@@ -13,20 +13,20 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringReader;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.jivesoftware.smack.roster.packet.RosterPacket.ItemType.from;
 
 public class Convert {
+
+    String session = "";
+    String raw = "";
+    ArrayList<String> media = new ArrayList<>();
+
     public String Jingle2SDP(JingleIQ jingleIQ, boolean removeTcpCandidates, boolean failICE) throws IOException, JDOMException {
 
         //xml parse
@@ -397,11 +397,10 @@ public class Convert {
         return sdpBuilder.toString();
     }
 
-    String session = "";
-    String raw = "";
-    ArrayList<String> media = new ArrayList<>();
-
-    public void SDP2Jingle(String sdp,String sessionID,String initiator, boolean removeTcpCandidates, boolean failICE) throws ParserConfigurationException {
+    public String SDP2Jingle(String sdp,String sessionID,String initiator, boolean removeTcpCandidates, boolean failICE) throws ParserConfigurationException {
+        session = "";
+        raw = "";
+        media = new ArrayList<>();
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -503,6 +502,7 @@ public class Convert {
                     org.w3c.dom.Element description = doc.createElement("description");
                     description.setAttribute("xmlns", "urn:xmpp:jingle:apps:rtp:1");
                     description.setAttribute("media", mline.get("media").toString());
+                    if(mline.get("media").toString().equals("audio")) description.setAttribute("maxptime", "60");
 //                    if (ssrc != null) {
 //                        description.setAttribute("ssrc", ssrc);
 //                    }
@@ -771,10 +771,18 @@ public class Convert {
         // output file as xml
         try {
             FileOutputStream output = new FileOutputStream(".\\staff-dom.xml");
-            writeXml(doc, output);
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString();
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        return "";
     }
 
     public Map<String,String> candidateToJingle(java.lang.String line){
@@ -882,7 +890,6 @@ public class Convert {
         data.put("params", parts);
         return data;
     }
-
     public String parseMSIDAttributes(ArrayList<String> ssrcLines) {
         String msidLine = "";
         for (var ssrcSdpLine : ssrcLines) {
@@ -894,7 +901,6 @@ public class Convert {
         return msidLine.substring(msidLine.indexOf(" msid") + 6);
 
     }
-
     public String parseSourceNameLine(ArrayList<String> ssrcLines) {
         for(var line : ssrcLines){
             if(line.indexOf(" name:") > 0){
@@ -903,7 +909,6 @@ public class Convert {
         }
         return null;
     }
-
     public String parseVideoType(ArrayList<String> ssrcLines) {
         String s = " videoType:";
         String videoTypeLine = "";
@@ -915,7 +920,6 @@ public class Convert {
         }
         return videoTypeLine.substring(videoTypeLine.indexOf(s) + s.length());
     }
-
     public HashMap<String,List<SourceParameterDataClass>> parseSSRC(String desc) {
         var lines = new ArrayList<>(Arrays.asList(desc.split("\n")));
         HashMap<String,List<SourceParameterDataClass>> result = new HashMap<>();
@@ -942,7 +946,6 @@ public class Convert {
 
         return result;
     }
-
     public List<org.w3c.dom.Element> rtcpFbToJingle(int i, org.w3c.dom.Document doc, String payload) {
         ArrayList<String> lines = findLines(media.get(i), STR."a=rtcp-fb:\{payload}", null);
         List<org.w3c.dom.Element> result = new ArrayList<>();
@@ -965,7 +968,6 @@ public class Convert {
         }
         return result;
     }
-
     public RTCPFBDataClass parseRTCPFB(String line) {
         var parts = new ArrayList<>(Arrays.asList(line.substring(9).split(" ")));
         var pt = parts.getFirst();
@@ -975,8 +977,6 @@ public class Convert {
         var params = parts;
         return new RTCPFBDataClass(pt, type, params);
     }
-
-
     public ArrayList<ParameterDataClass> parseFMTP(String data) {
         ArrayList<ParameterDataClass> result = new ArrayList<>();
         ArrayList<String> parts = new ArrayList<>(Arrays.asList(data.split(" ")));
@@ -1007,28 +1007,6 @@ public class Convert {
         }
         return result;
     }
-
-
-    //    Works for video
-//    public ParameterDataClass parseFMTP(String data) {
-//
-//        ArrayList<String> parts = new ArrayList<>(Arrays.asList(data.split(" ")));
-//        parts.removeFirst();
-//        StringBuilder newParts = new StringBuilder();
-//        for(var temp : parts){
-//            newParts.append(temp)  ;
-//        }
-//        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(newParts.toString().split("=")));
-//        String name = tempList.get(0);
-//        tempList.removeFirst();
-//        StringBuilder value = new StringBuilder();
-//        for(var temp : tempList){
-//          value.append(temp)  ;
-//        }
-//        return new ParameterDataClass(name,value.toString());
-//
-//    }
-
     public Map<String, Object> parseRTPMap(String data) {
         Map<String, Object> result = new HashMap<>();
         ArrayList<String> parts = new ArrayList<>(Arrays.asList(data.substring(9).split(" ")));
@@ -1046,7 +1024,6 @@ public class Convert {
         }
         return result;
     }
-
     public Map<String, Object> parseMLine(String data) {
         Map<String, Object> result = new HashMap<>();
         ArrayList<String> parts = new ArrayList<>(Arrays.asList(data.substring(2).split(" ")));
@@ -1066,7 +1043,6 @@ public class Convert {
         parts.removeFirst();
         return result;
     }
-
     public String findLine(String haystack, String needle, String sessionPart) {
         String[] lines = haystack.split("\n");
         ArrayList<String> needles = new ArrayList<>();
@@ -1089,7 +1065,6 @@ public class Convert {
         }
         return null;
     }
-
     public ArrayList<String> findLines(String haystack, String needle, String sessionPart) {
         String[] lines = haystack.split("\n");
         ArrayList<String> needles = new ArrayList<>();
@@ -1110,18 +1085,4 @@ public class Convert {
         }
         return needles;
     }
-
-    // write doc to output stream
-    private static void writeXml(org.w3c.dom.Document doc, OutputStream output)
-            throws TransformerException {
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(output);
-
-        transformer.transform(source, result);
-    }
-
-
 }

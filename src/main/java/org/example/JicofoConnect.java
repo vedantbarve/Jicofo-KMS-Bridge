@@ -45,6 +45,8 @@ public class JicofoConnect {
 
     private void connectTCP() {
         try {
+
+            // Config data for the XMPP connection
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                     .performSaslAnonymousAuthentication()
                     .setHost(this.host)
@@ -54,6 +56,9 @@ public class JicofoConnect {
                     .build();
             this.connectionTCP = new XMPPTCPConnection(config);
             this.connectionTCP.connect();
+
+            // Service discovery is necessary to advertise capabilities
+            // https://xmpp.org/registrar/disco-features.html
             ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(this.connectionTCP);
             if (discoManager != null) {
                 discoManager.addFeature("http://jabber.org/protocol/disco#info");
@@ -68,6 +73,8 @@ public class JicofoConnect {
                 discoManager.addFeature("http://jitsi.org/tcc");
             }
             this.connectionTCP.login();
+
+            // Register a listener that listens for incoming JingleIQ
             this.connectionTCP.registerIQRequestHandler(
                     new AbstractIqRequestHandler(
                             JingleIQ.ELEMENT,

@@ -11,8 +11,14 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        System.setProperty("smack.debugEnabled", "true");
+
+        // Enables debug logs for smack
+        System.setProperty("smack.debugEnabled", "true"); 
+
+        // Runs the function in the argument if there is ant parsing error
         SmackConfiguration.setDefaultParsingExceptionCallback(ExceptionLoggingCallback());
+
+        // Subscribe the ConferenceIQ and JingleIQ providers
         new ConferenceIqProvider();
         ProviderManager.addIQProvider(
                 JingleIQ.ELEMENT,
@@ -20,11 +26,12 @@ public class Main {
                 new JingleIQProvider()
         );
 
+        // Creating a new JicofoConnect object
         JicofoConnect jicofoConnect = new JicofoConnect(
                 "vedant-the-intern.pune.cdac.in",
                 "vedant-the-intern.pune.cdac.in",
                 5222,
-                "pop7@conference.vedant-the-intern.pune.cdac.in"
+                "pop@conference.vedant-the-intern.pune.cdac.in"
         );
         jicofoConnect.start();
 
