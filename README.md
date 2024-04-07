@@ -14,7 +14,7 @@ Following are some of the functions of this block:
 3. Convert SDP to JingleIQ
 
 ## Dataflow
-![dataflow](.\assets\dataflow.png)
+[![dataflow](https://github.com/vedantbarve/Jicofo-KMS-Bridge/blob/final/assets/dataflow.png?raw=true)
 
 1. We invite Jicofo to an MUC by sending it a ConferenceIQ.
 2. If Jicofo is not a of that MUC, then it joins the MUC, else it continues
@@ -28,3 +28,6 @@ Following are some of the functions of this block:
 
 ## Contact
 For any further details, feel free to contact me via email : barvevedant@gmail.com
+
+## Last Modified
+07-04-2024
