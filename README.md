@@ -1,7 +1,7 @@
 # Jicofo-KMS-Bridge (JKB)
 Project Name: Sangoshthee  
 Duration: 1st January 2024 - 1st April 2024 (3 months)  
-Location: Hybrid Mode: Online / C-DAC,Pune
+Location: C-DAC,Pune
 
 ## Introduction
 This repository is a result of the internship that I had done at Centre for Development of Advanced Computing (CDAC) from 01 January 2024 to April 2024 under the mentorship of Mr. Milind Jagtap and Mr. Deepanshu Rautela.
